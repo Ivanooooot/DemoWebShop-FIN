@@ -1,0 +1,23 @@
+﻿
+
+<h1>Hej, ovdje samo testiramo sesije!</h1>
+<hr />
+
+@* ViewBag svojstvo ReadSessionString ispisuje zabilježenu vrijednost sesije koja je proslijeđena iz akcije kontrolera *@
+<p>@ViewBag.ReadSessionString</p>
+
+<hr />
+
+<p>
+    @* Context - svojstvo preko kojeg u pogledima MVC arhitekture možemo doći do sesije *@
+    @Context.Session.GetString("sessionString")
+</p>
+
+@if(!String.IsNullOrEmpty(Context.Session.GetString("privacyString"))) {
+    <p>Dobro došli!</p>
+
+}
+
+@{
+    Context.Session.SetString("privacyString", String.Empty);
+}

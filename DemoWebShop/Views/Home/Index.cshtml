@@ -1,0 +1,87 @@
+﻿@model List<Product> 
+@*tipiziranje pogleda!!!!!!*@
+
+@{
+    ViewData["Title"] = "Dobro došli na naš mali webshop";
+    ViewData["Description"] = "Ovo je projektni zadatak programa obrzaovanja ASP.NET Developer";
+}
+
+<div class="text-center">
+    <h1>@ViewData["Title"]</h1>
+    <p>@ViewData["Description"]</p>
+</div>
+
+@if (!String.IsNullOrEmpty(ViewBag.ThankYouMessage))
+{
+    <div class="col-12">
+        <p class="alert alert-danger">@ViewBag.ThankYouMessage</p>
+    </div>
+}
+
+<form method="get" asp-area="" asp-controller="Home" asp-action="Index" class="row mb-5">
+
+    <div class="col-3">
+        <input type="text" class="form-control" name="searchQuery" />
+    </div>
+
+    <div class="col-3">
+        <select class="form-select" id="floatingSelect" name="categoryId">
+            <option selected value="0">All categories</option>
+            @foreach (var category in ViewBag.Categories)
+            {
+                <option value="@category.Id">@category.Title</option>
+            }
+        </select>
+    </div>
+
+    <div class="col-3">
+            <select class="form-select" name="orderBy">
+                <option value="">Default</option>
+                <option value="1">Title (A - Z)</option>
+                <option value="2">Title (Z - A)</option>
+                <option value="3">Price (1,2,3)</option>
+                <option value="4">Price (3,2,1)</option>
+            </select>
+     </div>
+
+    <div class="col-3">
+            <input type="submit" class="btn btn-success" value="Search..." />
+     </div>
+</form>
+
+<div class="row">
+
+    @foreach(var item in Model)
+    {
+        <div class="card col-4 mb-3">
+            <div class="card">
+            @{
+                string setImage = !String.IsNullOrEmpty(item.Image) ? "~/images/products/" + item.Image : "~/images/default-placeholder.png";
+            }
+            <img src="@Url.Content(setImage)" class="card-img-top" alt="...">
+
+                 <div class="card-body">
+
+                         <h5 class="card-title">@item.Title</h5>
+                        <p class="card-text">@item.Description</p>
+
+                        <p class="card-text">@item.Price.ToString("C2")</p>
+
+                        <p>
+                            <form method="POST" asp-area="" asp-controller="Cart" asp-action="AddToCart">
+
+                                <input type="hidden" name="productId" value="@item.Id" />
+
+                                <input type="number" name="quantity" class="form-control" min="1.00" max="@item.InStock" />
+
+                                <button type="submit" class="btn btn-success">
+                                    Add to cart
+                                </button>
+                            </form>
+                        </p>
+                  </div>
+            </div>
+        </div>
+    }
+
+</div>

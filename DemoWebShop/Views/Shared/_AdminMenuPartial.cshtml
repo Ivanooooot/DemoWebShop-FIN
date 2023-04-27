@@ -1,0 +1,40 @@
+﻿@*
+1. Uvjet - korisnik mora biti prijavljen
+2. Uvjet - prijavljeni korisnik mora imati ulogu admina
+*@
+
+@using Microsoft.AspNetCore.Identity
+@using DemoWebShop.Areas.Identity.Data
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@if(
+    SignInManager.IsSignedIn(User) &&
+    await UserManager.IsInRoleAsync(
+            UserManager.GetUserAsync(User).Result,
+            "admin"
+        )
+ 
+)
+{
+    <div class="dropdown">
+        <a class="btn nav-link dropdown-toggle" id="dropdownAdmin" data-bs-toggle="dropdown">
+            Admin
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a class="dropdown-item" type="button" asp-area="admin" asp-controller="categories" asp-action="index">
+                    Categories
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item" type="button" asp-area="admin" asp-controller="products" asp-action="index">
+                    Products          
+                </a>
+            </li>
+
+        </ul>
+    </div>
+
+}
